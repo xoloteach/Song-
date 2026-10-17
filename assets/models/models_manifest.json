@@ -1,0 +1,316 @@
+{
+  "generator": "blender/make_models.py (Blender 5.2.2 LTS)",
+  "font": "assets/fonts/BigShoulders-Bold.ttf",
+  "coordinates": "glTF Y-up; glyphs readable from +Z looking toward -Z; units arbitrary (glyph height 1.0 for digits)",
+  "digits.glb": {
+    "objects": {
+      "digit_0": {
+        "bounds_gltf": {
+          "min": [
+            -0.2477,
+            -0.5,
+            -0.09
+          ],
+          "max": [
+            0.2477,
+            0.5,
+            0.09
+          ]
+        },
+        "triangles": 1802,
+        "origin_gltf": [
+          0.0,
+          0.0,
+          -0.0
+        ]
+      },
+      "digit_1": {
+        "bounds_gltf": {
+          "min": [
+            -0.12,
+            -0.5,
+            -0.09
+          ],
+          "max": [
+            0.12,
+            0.5,
+            0.09
+          ]
+        },
+        "triangles": 108,
+        "origin_gltf": [
+          0.0,
+          0.0,
+          -0.0
+        ]
+      },
+      "digit_2": {
+        "bounds_gltf": {
+          "min": [
+            -0.2481,
+            -0.5,
+            -0.09
+          ],
+          "max": [
+            0.2481,
+            0.5,
+            0.09
+          ]
+        },
+        "triangles": 2854,
+        "origin_gltf": [
+          0.0,
+          0.0,
+          -0.0
+        ]
+      },
+      "digit_3": {
+        "bounds_gltf": {
+          "min": [
+            -0.2542,
+            -0.5,
+            -0.09
+          ],
+          "max": [
+            0.2542,
+            0.5,
+            0.09
+          ]
+        },
+        "triangles": 1816,
+        "origin_gltf": [
+          0.0,
+          0.0,
+          -0.0
+        ]
+      },
+      "digit_4": {
+        "bounds_gltf": {
+          "min": [
+            -0.2797,
+            -0.5,
+            -0.09
+          ],
+          "max": [
+            0.2797,
+            0.5,
+            0.09
+          ]
+        },
+        "triangles": 258,
+        "origin_gltf": [
+          0.0,
+          0.0,
+          -0.0
+        ]
+      },
+      "digit_5": {
+        "bounds_gltf": {
+          "min": [
+            -0.2558,
+            -0.5,
+            -0.09
+          ],
+          "max": [
+            0.2558,
+            0.5,
+            0.09
+          ]
+        },
+        "triangles": 2776,
+        "origin_gltf": [
+          0.0,
+          0.0,
+          -0.0
+        ]
+      },
+      "digit_6": {
+        "bounds_gltf": {
+          "min": [
+            -0.2482,
+            -0.5,
+            -0.09
+          ],
+          "max": [
+            0.2482,
+            0.5,
+            0.09
+          ]
+        },
+        "triangles": 3478,
+        "origin_gltf": [
+          0.0,
+          0.0,
+          -0.0
+        ]
+      },
+      "digit_7": {
+        "bounds_gltf": {
+          "min": [
+            -0.2569,
+            -0.5,
+            -0.09
+          ],
+          "max": [
+            0.2569,
+            0.5,
+            0.09
+          ]
+        },
+        "triangles": 108,
+        "origin_gltf": [
+          0.0,
+          0.0,
+          -0.0
+        ]
+      },
+      "digit_8": {
+        "bounds_gltf": {
+          "min": [
+            -0.2462,
+            -0.5,
+            -0.09
+          ],
+          "max": [
+            0.2462,
+            0.5,
+            0.09
+          ]
+        },
+        "triangles": 4520,
+        "origin_gltf": [
+          0.0,
+          0.0,
+          -0.0
+        ]
+      },
+      "digit_9": {
+        "bounds_gltf": {
+          "min": [
+            -0.2482,
+            -0.5,
+            -0.09
+          ],
+          "max": [
+            0.2482,
+            0.5,
+            0.09
+          ]
+        },
+        "triangles": 3344,
+        "origin_gltf": [
+          0.0,
+          0.0,
+          -0.0
+        ]
+      },
+      "ten": {
+        "bounds_gltf": {
+          "min": [
+            -0.4236,
+            -0.5,
+            -0.09
+          ],
+          "max": [
+            0.4236,
+            0.5,
+            0.09
+          ]
+        },
+        "triangles": 1954,
+        "origin_gltf": [
+          0.0,
+          0.0,
+          -0.0
+        ]
+      }
+    },
+    "spec": {
+      "glyph_height": 1.0,
+      "thickness": 0.18,
+      "bevel_depth": 0.025,
+      "bevel": "round, resolution 2 (3 segments)",
+      "resolution_u": 7,
+      "origin": "bbox centre (x, y, z)",
+      "smooth_by_angle_deg": 30
+    }
+  },
+  "ten_monument.glb": {
+    "objects": {
+      "mono_one": {
+        "bounds_gltf": {
+          "min": [
+            -4.3311,
+            0.0,
+            -1.1
+          ],
+          "max": [
+            -1.9311,
+            10.0,
+            1.1
+          ]
+        },
+        "triangles": 136,
+        "origin_gltf": [
+          -3.1311,
+          0.0,
+          -0.0
+        ]
+      },
+      "mono_zero": {
+        "bounds_gltf": {
+          "min": [
+            -0.7327,
+            0.0,
+            -1.1
+          ],
+          "max": [
+            4.332,
+            10.225,
+            1.1
+          ]
+        },
+        "triangles": 3012,
+        "origin_gltf": [
+          1.7996,
+          0.0,
+          -0.0
+        ]
+      },
+      "mono_plinth": {
+        "bounds_gltf": {
+          "min": [
+            -7.8311,
+            -1.7,
+            -4.6
+          ],
+          "max": [
+            7.8311,
+            0.0,
+            4.6
+          ]
+        },
+        "triangles": 564,
+        "origin_gltf": [
+          0.0,
+          0.0,
+          -0.0
+        ]
+      }
+    },
+    "x_offsets": {
+      "mono_one_x": -3.1311,
+      "mono_zero_x": 1.7996,
+      "pair_width": 8.6622,
+      "font_size": 17.71875
+    },
+    "spec": {
+      "glyph_height_of_1": 10.0,
+      "depth": 2.2,
+      "bevel_depth": 0.32,
+      "bevel": "round, resolution 3",
+      "origin": "bottom centre of each glyph (y=0 at glyph base); node translation = (x_offset, 0, 0)",
+      "plinth": "3 stepped tiers (0.55, 0.55, 0.6 tall), bevel 0.08x3, top surface at y=0, origin at top centre"
+    }
+  }
+}

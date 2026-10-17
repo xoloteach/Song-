@@ -1,0 +1,82 @@
+{
+  "generator": "blender/make_skies.py (Blender 5.2.2 LTS, Cycles CPU)",
+  "sky_model": "ShaderNodeTexSky sky_type=MULTIPLE_SCATTERING, altitude 100 m",
+  "resolution": [
+    4096,
+    2048
+  ],
+  "projection": "equirectangular, full 360x180, top row = zenith, bottom row = nadir",
+  "color": "8-bit sRGB PNG, view transform Standard, look None",
+  "mapping": {
+    "sun_column": "x = 2048 (u = 0.5, horizontal centre of the image)",
+    "sun_row": "y = 1024 - elevation_deg * 2048/180 (row 0 = top); elevation 0 = row 1024",
+    "blender_world": "image centre = Blender +Y, u=0.75 (right) = Blender +X, u=0.25 (left) = Blender -X, u=0/1 = Blender -Y",
+    "gltf_threejs_world": "Blender +Y == three.js -Z, Blender +X == three.js +X. three.js equirectUv() (u = atan(dir.z, dir.x)/2pi + 0.5) samples u=0.5 for dir +X, so with an unrotated scene.background/environment the sun appears toward three.js +X; rotate backgroundRotation/environmentRotation .y to aim it elsewhere (verify visually).",
+    "how": "panoramic camera rotation_euler = (90deg, 0, 0); Sky Texture sun_rotation = 0 (sun azimuth on Blender +Y)."
+  },
+  "skies": {
+    "sky_predawn": {
+      "file": "sky_predawn.png",
+      "sun_elevation_deg": -3.5,
+      "sun_azimuth_deg_blender_sun_rotation": 0.0,
+      "sun_pixel": [
+        2048,
+        1063.8
+      ],
+      "sun_disc_visible": false,
+      "exposure_ev": 0.719,
+      "exposure_applied": "in the world shader (colour * 2^ev) followed by a hue-preserving extended-Reinhard luminance shoulder (white point = tonemap_white) and a per-channel exponential soft-clip above 0.75 linear; scene view exposure = 0",
+      "tonemap_white": 6.0,
+      "saturation_grade": 1.0,
+      "exposure_method": "auto: 50.0th percentile luminance of upper hemisphere (sun excluded) -> display 0.2",
+      "air_density": 1.0,
+      "aerosol_density": 1.0,
+      "ozone_density": 3.0,
+      "sun_size_deg": 0.545,
+      "sun_intensity": 1.0,
+      "samples": 8
+    },
+    "sky_sunrise": {
+      "file": "sky_sunrise.png",
+      "sun_elevation_deg": 2.2,
+      "sun_azimuth_deg_blender_sun_rotation": 0.0,
+      "sun_pixel": [
+        2048,
+        999.0
+      ],
+      "sun_disc_visible": true,
+      "exposure_ev": -1.848,
+      "exposure_applied": "in the world shader (colour * 2^ev) followed by a hue-preserving extended-Reinhard luminance shoulder (white point = tonemap_white) and a per-channel exponential soft-clip above 0.75 linear; scene view exposure = 0",
+      "tonemap_white": 10.0,
+      "saturation_grade": 1.15,
+      "exposure_method": "auto: 50.0th percentile luminance of upper hemisphere (sun excluded) -> display 0.42",
+      "air_density": 1.0,
+      "aerosol_density": 1.2,
+      "ozone_density": 1.2,
+      "sun_size_deg": 0.545,
+      "sun_intensity": 1.0,
+      "samples": 8
+    },
+    "sky_golden": {
+      "file": "sky_golden.png",
+      "sun_elevation_deg": 9.0,
+      "sun_azimuth_deg_blender_sun_rotation": 0.0,
+      "sun_pixel": [
+        2048,
+        921.6
+      ],
+      "sun_disc_visible": true,
+      "exposure_ev": -2.49,
+      "exposure_applied": "in the world shader (colour * 2^ev) followed by a hue-preserving extended-Reinhard luminance shoulder (white point = tonemap_white) and a per-channel exponential soft-clip above 0.75 linear; scene view exposure = 0",
+      "tonemap_white": 10.0,
+      "saturation_grade": 1.1,
+      "exposure_method": "auto: 50.0th percentile luminance of upper hemisphere (sun excluded) -> display 0.55",
+      "air_density": 1.8,
+      "aerosol_density": 2.0,
+      "ozone_density": 1.0,
+      "sun_size_deg": 0.545,
+      "sun_intensity": 1.0,
+      "samples": 8
+    }
+  }
+}

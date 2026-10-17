@@ -1,0 +1,14 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Three.js / 3D</title><style>html,body{margin:0;height:100%;overflow:hidden;background:#090911}canvas{display:block}#label{position:fixed;top:30px;left:40px;color:#e8d5d3;font:18px monospace;letter-spacing:2px;pointer-events:none}#error{position:fixed;bottom:20px;left:30px;color:#ffb4a2;font:14px monospace;max-width:80%}</style></head><body><div id="label">THREE.JS / PROCEDURAL 3D</div><div id="error"></div><script type="module">
+try{
+ const THREE=await import('../node_modules/three/build/three.module.js');
+ const scene=new THREE.Scene();scene.background=new THREE.Color('#090911');
+ const camera=new THREE.PerspectiveCamera(42,innerWidth/innerHeight,.1,100);camera.position.set(0,0,10);
+ const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setPixelRatio(devicePixelRatio);renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;document.body.appendChild(renderer.domElement);
+ scene.add(new THREE.AmbientLight('#ead9e7',1.1));const light=new THREE.PointLight('#db8969',180);light.position.set(4,5,7);scene.add(light);
+ const geo=new THREE.IcosahedronGeometry(2.3,1);const mat=new THREE.MeshStandardMaterial({color:'#cc7059',roughness:.25,metalness:.68,flatShading:true,wireframe:false});const mesh=new THREE.Mesh(geo,mat);scene.add(mesh);
+ const edges=new THREE.LineSegments(new THREE.EdgesGeometry(geo),new THREE.LineBasicMaterial({color:'#f5ded7',transparent:true,opacity:.78}));mesh.add(edges);
+ window.renderFrameAt=t=>{mesh.rotation.set(.12+t*.18,.25+t*.45,Math.sin(t*.4)*.17);mesh.scale.setScalar(1+.085*Math.sin(t*12.56));renderer.render(scene,camera)};
+ window.renderFrameAt(0);const qp=new URLSearchParams(location.search);if(qp.has('t'))window.renderFrameAt(Number(qp.get('t')));else{let start=performance.now();function loop(now){window.renderFrameAt((now-start)/1000);requestAnimationFrame(loop)}requestAnimationFrame(loop)}
+ addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)})
+}catch(e){document.querySelector('#error').textContent='Three.js unavailable: run npm install in tools/. '+e.message;console.error(e)}
+</script></body></html>

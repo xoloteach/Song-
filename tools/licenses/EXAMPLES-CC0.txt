@@ -1,0 +1,1 @@
+Original demo scenes, SVG, helper scripts, and documentation authored for this toolkit are dedicated to the public domain under CC0 1.0. This declaration does not change the licenses of third-party dependencies installed through npm, Blender, FFmpeg, Chrome, or other external programs.

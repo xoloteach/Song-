@@ -1,0 +1,10 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Canvas2D / MUSIC VIDEO</title><style>*{box-sizing:border-box}html,body{height:100%;margin:0;background:#08090e;overflow:hidden}canvas{display:block;width:100%;height:100%}.help{position:fixed;bottom:16px;left:24px;color:#f6dfdacc;font:12px monospace;pointer-events:none}</style></head><body><canvas id="v"></canvas><div class="help">CANVAS 2D • deterministic timeline • renderFrameAt(t)</div><script>
+const canvas=document.querySelector('#v'),ctx=canvas.getContext('2d');let t0=0;
+function draw(t){const w=canvas.width=innerWidth*devicePixelRatio,h=canvas.height=innerHeight*devicePixelRatio;const s=Math.min(w/1920,h/1080);ctx.save();ctx.scale(s,s);const W=w/s,H=h/s;
+ctx.fillStyle='#0c0a0e';ctx.fillRect(0,0,W,H);
+ctx.strokeStyle='#ffffff11';ctx.lineWidth=1;for(let x=0;x<W;x+=34){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}for(let y=0;y<H;y+=34){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+const beat=(Math.sin(t*2*Math.PI*2)+1)/2;ctx.save();ctx.translate(W/2,H/2);ctx.rotate(t*.23);ctx.shadowColor='#d57d60';ctx.shadowBlur=30+beat*80;ctx.fillStyle='#d27b60';ctx.strokeStyle='#f6d9d3';ctx.lineWidth=3;ctx.beginPath();for(let i=0;i<10;i++){let a=i*Math.PI/5-Math.PI/2,r=(i%2?165:345)*(1+.11*beat);ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();
+ctx.textAlign='center';ctx.shadowBlur=0;ctx.fillStyle='#fff0ea';ctx.font=`700 ${Math.max(30,Math.round(W*.058))}px system-ui`;ctx.fillText('MOTION / WITHOUT LIMITS',W/2,H*.87);ctx.fillStyle='#d69d8d';ctx.font='21px monospace';ctx.fillText(`CANVAS 2D · ${t.toFixed(2)}s · 120 BPM GRID`,W/2,H*.925);ctx.restore()}
+window.renderFrameAt=(seconds)=>{t0=Number(seconds)||0;draw(t0)};
+const q=new URLSearchParams(location.search);if(q.has('t'))window.renderFrameAt(Number(q.get('t')));else{const start=performance.now();function animate(now){window.renderFrameAt((now-start)/1000);requestAnimationFrame(animate)}requestAnimationFrame(animate)}
+</script></body></html>

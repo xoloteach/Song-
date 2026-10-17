@@ -1,0 +1,21 @@
+{
+  "name": "music-video-tools",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Local 2D/3D/SVG/Anime.js video production toolkit",
+  "type": "module",
+  "scripts": {
+    "setup": "npm install",
+    "check": "node scripts/check.mjs",
+    "start": "node scripts/serve.mjs",
+    "render:demo": "node scripts/render.mjs --scene demos/canvas2d.html --duration 3 --output final/demo.mp4",
+    "render:svg": "node scripts/render.mjs --scene demos/svg_animation.html --duration 3 --output final/svg-demo.mp4",
+    "render:3d": "node scripts/render.mjs --scene demos/three_scene.html --duration 3 --output final/three-demo.mp4"
+  },
+  "dependencies": {
+    "three": "0.180.0",
+    "animejs": "4.2.2",
+    "puppeteer-core": "24.22.0"
+  },
+  "engines": {"node": ">=20"}
+}

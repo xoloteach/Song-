@@ -1,0 +1,6 @@
+tools/node_modules/
+render/segments/
+*.log
+video/bench/
+__pycache__/
+final/*.verify.json

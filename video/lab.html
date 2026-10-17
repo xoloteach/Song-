@@ -1,0 +1,33 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="fonts.css">
+<script type="importmap">{"imports":{"three":"/tools/node_modules/three/build/three.module.js","three/addons/":"/tools/node_modules/three/examples/jsm/"}}</script></head>
+<body><canvas id="gl" width="1920" height="1080"></canvas>
+<script type="module">
+import * as THREE from 'three';
+import { Engine } from './src/core/engine.js';
+import { G, loadMatcaps, setLight, resetLights } from './src/core/materials.js';
+import { Character } from './src/core/rig.js';
+import { POSES, MOVES } from './src/core/moves.js';
+await document.fonts.load('700 100px "Big Shoulders"'); await document.fonts.load('28px "JetBrains Mono"');
+await loadMatcaps(['clay_dark', 'obsidian', 'pearl_dawn', 'glass_echo', 'gold', 'chrome_night']);
+const Q = new URLSearchParams(location.search);
+const eng = new Engine(document.getElementById('gl'));
+const scene = new THREE.Scene();
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(40, 40), new THREE.MeshBasicMaterial({ color: 0x0c0c10 })); floor.rotation.x = -Math.PI / 2; scene.add(floor);
+const names = (Q.get('poses') || Object.keys(POSES).slice(0, 10).join(',')).split(',');
+const chars = names.map((n, i) => { const c = new Character({ style: (Q.get('echo') && i % 2) ? 'echo' : 'zero', number: i }); scene.add(c.root); return c; });
+const cam = new THREE.PerspectiveCamera(30, 1920 / 1080, .1, 200);
+G.uKeyDir.value.set(.5, .7, .6).normalize(); G.uKeyCol.value.setRGB(1.2, 1.05, .9); G.uSkyCol.value.setRGB(.12, .14, .2); G.uRimCol.value.setRGB(.4, .6, 1.2); G.uFogDensity.value = 0;
+window.renderFrameAt = async (t) => {
+  eng.beginFrame();
+  const cols = Math.min(5, names.length), rows = Math.ceil(names.length / cols);
+  chars.forEach((c, i) => { const n = names[i]; const p = MOVES[n] ? MOVES[n](t / (60 / 126), {}) : POSES[n]; c.applyPose(p);
+    c.root.position.x += (i % cols - (cols - 1) / 2) * 1.55; c.root.rotation.y += Number(Q.get('ry') || 0.5); c.root.updateMatrixWorld(true); });
+  const view = Q.get('view') || 'front';
+  cam.position.set(view === 'side' ? 8 : 0, 1.6, view === 'side' ? 0 : 7.5); cam.lookAt(0, .95, 0);
+  eng.renderLayer('A', scene, cam); eng.fx.grain = 0; eng.fx.vignette = .1;
+  const x = eng.post.ctx; eng.post.used = true; x.fillStyle = '#fff'; x.font = '28px "JetBrains Mono"';
+  names.forEach((n, i) => { x.fillText(n, 150 + (i % cols) * 345, 120); });
+  eng.compose(t, 0, false); eng.finish();
+};
+window.ready = true;
+</script></body></html>
