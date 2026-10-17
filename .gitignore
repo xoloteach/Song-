@@ -4,3 +4,4 @@ render/segments/
 video/bench/
 __pycache__/
 final/*.verify.json
+final/preview_progress.mp4
