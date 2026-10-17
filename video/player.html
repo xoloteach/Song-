@@ -1,5 +1,6 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>TEN — Live Player</title><link rel="stylesheet" href="fonts.css">
+<script>if(!location.search.includes('scale'))location.replace('?scale=0.6&msaa=0&live=1');</script>
 <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/addons/"}}</script>
 <style>
 :root{--bg:#07060b;--ink:#f2ead8;--gold:#ffcf6b}
@@ -14,11 +15,12 @@ button.rec{background:#ff5a36;color:#fff} button:disabled{opacity:.4}
 </style></head><body>
 <canvas id="gl" width="1920" height="1080"></canvas>
 <div id="cover"><div><h1>TEN</h1><p>ANNO DOMINI BEATS · real-time render on your GPU</p><p id="ld">loading scenes, baking city lights… (first load can take a minute)</p></div></div>
-<div id="ui"><button id="play" disabled>▶ PLAY</button><button id="rec" class="rec" disabled>● RECORD</button><span id="st"></span><a id="dl"></a></div><div id="bar"></div>
+<div id="ui"><select id="q" style="font:700 14px monospace;padding:8px"><option value="0.5">FAST 960p</option><option value="0.6">BALANCED 1150p</option><option value="0.75">HIGH 1440p</option><option value="1">FULL 1080p+AA</option></select><button id="play" disabled>▶ PLAY</button><button id="rec" class="rec" disabled>● RECORD</button><span id="st"></span><a id="dl"></a></div><div id="bar"></div>
 <audio id="au" src="../song/Ten%20-%20Anno%20Domini%20Beats.mp3" preload="auto" crossorigin="anonymous"></audio>
 <script type="module">
 import './src/main.js';
 const $ = id => document.getElementById(id), au = $('au');
+const Q = new URLSearchParams(location.search); $('q').value = Q.get('scale'); $('q').onchange = e => { const v = e.target.value; location.search = v === '1' ? '?scale=1&msaa=4&live=1' : `?scale=${v}&msaa=0&live=1`; };
 const wait = () => new Promise(r => { const k = () => window.ready ? r() : setTimeout(k, 200); k(); });
 await wait(); $('cover').remove(); $('play').disabled = $('rec').disabled = false;
 let running = false, busy = false, frames = 0, t0 = performance.now(), rec = null, chunks = [];

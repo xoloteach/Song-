@@ -4,6 +4,8 @@
 import * as THREE from 'three';
 
 export const W = 1920, H = 1080;
+const QS = new URLSearchParams(location.search);
+export const SC = Number(QS.get('scale') || 1), GW = Math.round(W * SC), GH = Math.round(H * SC);
 const FSQ_VERT = `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0., 1.); }`;
 
 function rt(w, h, opts = {}) {
@@ -14,19 +16,19 @@ function rt(w, h, opts = {}) {
 export class Engine {
   constructor(canvas) {
     const r = this.renderer = new THREE.WebGLRenderer({ canvas, antialias: false, preserveDrawingBuffer: true, alpha: false, powerPreference: 'high-performance' });
-    r.setPixelRatio(1); r.setSize(W, H, false);
+    r.setPixelRatio(1); r.setSize(GW, GH, false);
     r.outputColorSpace = THREE.LinearSRGBColorSpace; r.toneMapping = THREE.NoToneMapping; r.autoClear = true;
     this.samples = Number(new URLSearchParams(location.search).get('msaa') ?? 4);
-    this.rtA = rt(W, H, { depth: true, samples: this.samples });
-    this.rtB = rt(W, H, { depth: true, samples: this.samples });
-    this.rtMix = rt(W, H);
-    this.bloomLv = []; let w = W, h = H;
+    this.rtA = rt(GW, GH, { depth: true, samples: this.samples });
+    this.rtB = rt(GW, GH, { depth: true, samples: this.samples });
+    this.rtMix = rt(GW, GH);
+    this.bloomLv = []; let w = GW, h = GH;
     for (let i = 0; i < 6; i++) { w = Math.max(1, w >> 1); h = Math.max(1, h >> 1); this.bloomLv.push({ down: rt(w, h), up: rt(w, h), w, h }); }
     this.fsScene = new THREE.Scene(); this.fsCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
     this.quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2)); this.quad.frustumCulled = false; this.fsScene.add(this.quad);
     // 2D canvases
     const mk = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.NoColorSpace; t.premultiplyAlpha = true; t.generateMipmaps = false; t.minFilter = t.magFilter = THREE.LinearFilter; return { c, ctx: c.getContext('2d'), tex: t, used: false }; };
-    this.post = mk(W, H); this.pre = mk(W, H); this.mask = mk(W / 2, H / 2);
+    this.post = mk(GW, GH); this.pre = mk(GW, GH); this.mask = mk(Math.round(GW / 2), Math.round(GH / 2));
     this.blank = new THREE.DataTexture(new Uint8Array([0, 0, 0, 0]), 1, 1); this.blank.needsUpdate = true;
     this.white = new THREE.DataTexture(new Uint8Array([255, 255, 255, 255]), 1, 1); this.white.needsUpdate = true;
     this._mats();
@@ -81,7 +83,7 @@ export class Engine {
         uLift: { value: new THREE.Vector3() }, uGamma: { value: new THREE.Vector3(1, 1, 1) }, uGain: { value: new THREE.Vector3(1, 1, 1) },
         uVignette: { value: .3 }, uGrain: { value: .04 }, uCA: { value: .001 }, uInk: { value: 0 }, uInkPaper: { value: new THREE.Vector3() }, uInkInk: { value: new THREE.Vector3() },
         uInkScale: { value: 7 }, uInkAngle: { value: .5 }, uLetterbox: { value: 0 }, uFlash: { value: 0 }, uFlashColor: { value: new THREE.Vector3(1, 1, 1) },
-        uFade: { value: 0 }, uFadeColor: { value: new THREE.Vector3() }, uRes: { value: new THREE.Vector2(W, H) }, uShake: { value: new THREE.Vector2() }, uInvert: { value: 0 },
+        uFade: { value: 0 }, uFadeColor: { value: new THREE.Vector3() }, uRes: { value: new THREE.Vector2(GW, GH) }, uShake: { value: new THREE.Vector2() }, uInvert: { value: 0 },
       },
       fragmentShader: `varying vec2 vUv; uniform sampler2D tHDR, tBloom, tPost; uniform float uTime, uFrame, uExposure, uBloom, uTemp, uTint, uSat, uContrast,
         uVignette, uGrain, uCA, uInk, uInkScale, uInkAngle, uLetterbox, uFlash, uFade, uInvert; uniform vec3 uLift, uGamma, uGain, uInkPaper, uInkInk, uFlashColor, uFadeColor; uniform vec2 uRes, uShake;
@@ -108,7 +110,7 @@ export class Engine {
           // ink / halftone print look (3D -> 2D bridge)
           if (uInk > 0.) {
             float L = luma(s);
-            vec2 px = gl_FragCoord.xy; float ca = cos(uInkAngle), sa = sin(uInkAngle);
+            vec2 px = gl_FragCoord.xy * (1920. / uRes.x); float ca = cos(uInkAngle), sa = sin(uInkAngle);
             vec2 q = mat2(ca, -sa, sa, ca) * px / uInkScale; vec2 cell = fract(q) - .5;
             float dotR = sqrt(clamp(1. - L, 0., 1.)) * .62; float dt = smoothstep(dotR + .06, dotR - .06, length(cell));
             // edge detect
@@ -136,7 +138,7 @@ export class Engine {
   }
   _pass(mat, target) { this.quad.material = mat; this.renderer.setRenderTarget(target); this.renderer.render(this.fsScene, this.fsCam); }
   beginFrame() {
-    for (const k of ['post', 'pre', 'mask']) { const L = this[k]; L.ctx.setTransform(1, 0, 0, 1, 0, 0); L.ctx.clearRect(0, 0, L.c.width, L.c.height); L.used = false; L.ctx.globalAlpha = 1; L.ctx.globalCompositeOperation = 'source-over'; }
+    for (const k of ['post', 'pre', 'mask']) { const L = this[k]; L.ctx.setTransform(1, 0, 0, 1, 0, 0); L.ctx.clearRect(0, 0, L.c.width, L.c.height); L.ctx.setTransform(SC, 0, 0, SC, 0, 0); L.used = false; L.ctx.globalAlpha = 1; L.ctx.globalCompositeOperation = 'source-over'; }
     this.resetFX();
   }
   renderLayer(which, scene, camera) {
@@ -148,9 +150,9 @@ export class Engine {
     const target = which === 'B' ? this.rtB : this.rtA, r = this.renderer;
     r.setRenderTarget(target); r.setClearColor(0x000000, 1); r.clear();
     target.scissorTest = true;
-    cams.forEach((c, i) => { const [x, y, w, h] = rects[i]; c.aspect = w / h; c.updateProjectionMatrix();
+    cams.forEach((c, i) => { const [x, y, w, h] = rects[i].map(v => Math.round(v * SC)); c.aspect = w / h; c.updateProjectionMatrix();
       target.viewport.set(x, y, w, h); target.scissor.set(x, y, w, h); r.setRenderTarget(target); r.render(scene, c); });
-    target.viewport.set(0, 0, W, H); target.scissor.set(0, 0, W, H); target.scissorTest = false; r.setRenderTarget(null);
+    target.viewport.set(0, 0, GW, GH); target.scissor.set(0, 0, GW, GH); target.scissorTest = false; r.setRenderTarget(null);
   }
   compose(t, frame, hasB) {
     const fx = this.fx, r = this.renderer;
@@ -166,7 +168,7 @@ export class Engine {
     const nb = (window.DBG || '').includes('bloom') ? 0 : L.length;
     for (let i = 0; i < L.length; i++) {
       const u = this.downMat.uniforms; u.tSrc.value = src; u.uFirst.value = i === 0 ? 1 : 0; u.uThresh.value = fx.bloomThreshold;
-      const sw = i === 0 ? W : L[i - 1].w, sh = i === 0 ? H : L[i - 1].h; u.uTexel.value.set(1 / sw, 1 / sh);
+      const sw = i === 0 ? GW : L[i - 1].w, sh = i === 0 ? GH : L[i - 1].h; u.uTexel.value.set(1 / sw, 1 / sh);
       this._pass(this.downMat, L[i].down); src = L[i].down.texture;
     }
     let up = L[L.length - 1].down.texture;
@@ -183,5 +185,5 @@ export class Engine {
     f.uFade.value = fx.fade; f.uFadeColor.value.fromArray(fx.fadeColor); f.uShake.value.set(fx.shake[0], fx.shake[1]); f.uInvert.value = fx.invert;
     this._pass(this.finalMat, null);
   }
-  finish() { const gl = this.renderer.getContext(); const px = new Uint8Array(4); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px); }
+  finish() { if (QS.get('live')) return; const gl = this.renderer.getContext(); const px = new Uint8Array(4); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px); }
 }

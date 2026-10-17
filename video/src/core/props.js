@@ -2,6 +2,7 @@
 import * as THREE from 'three';
 import { G, litMat, buildingMat, glowMat, lightCone } from './materials.js';
 import { rng } from './util.js';
+import { SC } from './engine.js';
 
 export const LAYER_REFLECT = 1;
 export function reflectable(obj) { obj.traverse(o => o.layers.enable(LAYER_REFLECT)); return obj; }
@@ -45,7 +46,7 @@ export function bakeFarField(renderer, scene, keep, sky, pos, size = 1024, o = {
 export class Mirror {
   constructor(renderer, size = [960, 540], planeY = 0) {
     this.r = renderer; this.planeY = planeY;
-    this.rt = new THREE.WebGLRenderTarget(size[0], size[1], { type: THREE.HalfFloatType, samples: 0 });
+    this.rt = new THREE.WebGLRenderTarget(Math.round(size[0] * SC), Math.round(size[1] * SC), { type: THREE.HalfFloatType, samples: 0 });
     this.cam = new THREE.PerspectiveCamera(); this.texMat = new THREE.Matrix4();
   }
   render(scene, camera) {
