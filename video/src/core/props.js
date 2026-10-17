@@ -188,7 +188,7 @@ export async function loadDigits() {
   const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
   const L = new GLTFLoader();
   const load = (u) => new Promise(ok => L.load(u, g => ok(g), undefined, () => ok(null)));
-  const d = await load('/assets/models/digits.glb'); if (d) d.scene.traverse(o => { if (o.isMesh) DIGITS[o.name] = o.geometry; });
-  const m = await load('/assets/models/ten_monument.glb'); if (m) m.scene.traverse(o => { if (o.isMesh) DIGITS[o.name] = { geo: o.geometry, pos: o.position.clone() }; });
+  const d = await load('../assets/models/digits.glb'); if (d) d.scene.traverse(o => { if (o.isMesh) DIGITS[o.name] = o.geometry; });
+  const m = await load('../assets/models/ten_monument.glb'); if (m) m.scene.traverse(o => { if (o.isMesh) DIGITS[o.name] = { geo: o.geometry, pos: o.position.clone() }; });
   return DIGITS;
 }

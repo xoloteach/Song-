@@ -26,7 +26,7 @@ class App {
     await Promise.all([
       document.fonts.load('700 100px "Big Shoulders"'), document.fonts.load('400 100px "Big Shoulders"'), document.fonts.load('900 100px "Inter Display"'),
       document.fonts.load('700 100px "Inter Display"'), document.fonts.load('400 30px "JetBrains Mono"'), document.fonts.load('700 30px "JetBrains Mono"')]);
-    await loadAudio('/video/data/audio.json');
+    await loadAudio('data/audio.json');
     await loadMatcaps(['clay_dark', 'obsidian', 'pearl_dawn', 'glass_echo', 'gold', 'chrome_night']);
     await loadDigits(); await loadSkies();
     this.S.intro = new Intro(this); this.S.grind = new Grind(this); this.S.run = new Run(this); this.S.crew = new Crew(this); this.S.blueprint = new Blueprint(this); this.S.rise = new Rise(this); this.S.summit = new Summit(this);

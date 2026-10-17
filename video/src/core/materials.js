@@ -87,7 +87,7 @@ function grayMatcap() {
 export const MATCAPS = {};
 export async function loadMatcaps(names) {
   const L = new THREE.TextureLoader();
-  await Promise.all(names.map(n => new Promise(ok => L.load(`/assets/matcaps/${n}.png`, t => { t.colorSpace = THREE.SRGBColorSpace; MATCAPS[n] = t; ok(); }, undefined, () => { console.warn('matcap missing', n); MATCAPS[n] = grayMatcap(); ok(); }))));
+  await Promise.all(names.map(n => new Promise(ok => L.load(`../assets/matcaps/${n}.png`, t => { t.colorSpace = THREE.SRGBColorSpace; MATCAPS[n] = t; ok(); }, undefined, () => { console.warn('matcap missing', n); MATCAPS[n] = grayMatcap(); ok(); }))));
 }
 
 export function litMat(o = {}) {
@@ -286,5 +286,5 @@ export function cardMat(tex, o = {}) {
 export const SKYTEX = {};
 export async function loadSkies() {
   const L = new THREE.TextureLoader();
-  await Promise.all(['predawn', 'sunrise', 'golden'].map(n => new Promise(ok => L.load(`/assets/sky/sky_${n}.png`, t => { t.colorSpace = THREE.SRGBColorSpace; SKYTEX[n] = t; ok(); }, undefined, () => ok()))));
+  await Promise.all(['predawn', 'sunrise', 'golden'].map(n => new Promise(ok => L.load(`../assets/sky/sky_${n}.png`, t => { t.colorSpace = THREE.SRGBColorSpace; SKYTEX[n] = t; ok(); }, undefined, () => ok()))));
 }

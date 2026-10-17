@@ -1,6 +1,6 @@
 // 2D motion-graphics language: ink strokes, tally marks, Roman numerals, kinetic type, halftone, panels,
 // speed lines. Anime.js timelines (seeked, never auto-played) choreograph the typography.
-import { createTimeline, stagger } from '../../../tools/node_modules/animejs/dist/bundles/anime.esm.js';
+import { createTimeline, stagger } from '../../vendor/anime.esm.js';
 import { clamp, lerp, ease, hash, hash2, noise1, PI, TAU } from './util.js';
 
 export const INK = '#f2ead8', GOLD = '#ffcf6b', GOLD2 = '#f5a83a', EMBER = '#ff5a36', NIGHT = '#0a0d1a', CYAN = '#7fd6ff';

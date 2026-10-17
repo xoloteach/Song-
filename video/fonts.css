@@ -1,10 +1,10 @@
-@font-face { font-family: "Big Shoulders"; src: url("/assets/fonts/BigShoulders-Bold.ttf"); font-weight: 700; }
-@font-face { font-family: "Big Shoulders"; src: url("/assets/fonts/BigShoulders-Regular.ttf"); font-weight: 400; }
-@font-face { font-family: "Inter Display"; src: url("/assets/fonts/InterDisplay-Black.otf"); font-weight: 900; }
-@font-face { font-family: "Inter Display"; src: url("/assets/fonts/InterDisplay-Bold.otf"); font-weight: 700; }
-@font-face { font-family: "Inter Display"; src: url("/assets/fonts/InterDisplay-Medium.otf"); font-weight: 500; }
-@font-face { font-family: "Inter"; src: url("/assets/fonts/Inter-Regular.otf"); font-weight: 400; }
-@font-face { font-family: "JetBrains Mono"; src: url("/assets/fonts/JetBrainsMono-Regular.ttf"); font-weight: 400; }
-@font-face { font-family: "JetBrains Mono"; src: url("/assets/fonts/JetBrainsMono-Bold.ttf"); font-weight: 700; }
+@font-face { font-family: "Big Shoulders"; src: url("../assets/fonts/BigShoulders-Bold.ttf"); font-weight: 700; }
+@font-face { font-family: "Big Shoulders"; src: url("../assets/fonts/BigShoulders-Regular.ttf"); font-weight: 400; }
+@font-face { font-family: "Inter Display"; src: url("../assets/fonts/InterDisplay-Black.otf"); font-weight: 900; }
+@font-face { font-family: "Inter Display"; src: url("../assets/fonts/InterDisplay-Bold.otf"); font-weight: 700; }
+@font-face { font-family: "Inter Display"; src: url("../assets/fonts/InterDisplay-Medium.otf"); font-weight: 500; }
+@font-face { font-family: "Inter"; src: url("../assets/fonts/Inter-Regular.otf"); font-weight: 400; }
+@font-face { font-family: "JetBrains Mono"; src: url("../assets/fonts/JetBrainsMono-Regular.ttf"); font-weight: 400; }
+@font-face { font-family: "JetBrains Mono"; src: url("../assets/fonts/JetBrainsMono-Bold.ttf"); font-weight: 700; }
 html, body { margin: 0; background: #000; overflow: hidden; }
 canvas#gl { display: block; width: 1920px; height: 1080px; }

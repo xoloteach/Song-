@@ -1,0 +1,45 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TEN — Live Player</title><link rel="stylesheet" href="fonts.css">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/addons/"}}</script>
+<style>
+:root{--bg:#07060b;--ink:#f2ead8;--gold:#ffcf6b}
+html,body{background:var(--bg);color:var(--ink);font-family:"JetBrains Mono",monospace;height:100%;overflow:hidden}
+canvas#gl{position:absolute;inset:0;margin:auto;width:100vw!important;height:56.25vw!important;max-height:100vh;max-width:177.78vh}
+#ui{position:fixed;left:0;right:0;bottom:0;display:flex;gap:10px;align-items:center;padding:12px 16px;background:linear-gradient(transparent,#000c);flex-wrap:wrap}
+button{font:700 15px "JetBrains Mono";background:var(--ink);color:#0b0910;border:0;padding:10px 16px;border-radius:6px}
+button.rec{background:#ff5a36;color:#fff} button:disabled{opacity:.4}
+#st{flex:1;min-width:180px;font-size:13px} #bar{position:fixed;left:0;bottom:0;height:3px;background:var(--gold);width:0}
+#cover{position:fixed;inset:0;display:grid;place-items:center;text-align:center;background:var(--bg);z-index:5}
+#cover h1{font:700 22vmin/1 "Big Shoulders";margin:0;letter-spacing:.05em} #cover p{opacity:.7;font-size:14px;padding:0 16px}
+</style></head><body>
+<canvas id="gl" width="1920" height="1080"></canvas>
+<div id="cover"><div><h1>TEN</h1><p>ANNO DOMINI BEATS · real-time render on your GPU</p><p id="ld">loading scenes, baking city lights… (first load can take a minute)</p></div></div>
+<div id="ui"><button id="play" disabled>▶ PLAY</button><button id="rec" class="rec" disabled>● RECORD</button><span id="st"></span><a id="dl"></a></div><div id="bar"></div>
+<audio id="au" src="../song/Ten%20-%20Anno%20Domini%20Beats.mp3" preload="auto" crossorigin="anonymous"></audio>
+<script type="module">
+import './src/main.js';
+const $ = id => document.getElementById(id), au = $('au');
+const wait = () => new Promise(r => { const k = () => window.ready ? r() : setTimeout(k, 200); k(); });
+await wait(); $('cover').remove(); $('play').disabled = $('rec').disabled = false;
+let running = false, busy = false, frames = 0, t0 = performance.now(), rec = null, chunks = [];
+async function loop() {
+  if (!running) return; requestAnimationFrame(loop);
+  if (busy) return; busy = true;
+  const t = Math.min(au.currentTime, 163.45); await window.renderFrameAt(t); busy = false; frames++;
+  const el = (performance.now() - t0) / 1000; $('st').textContent = `${t.toFixed(1)} / 163.5 s · ${(frames / el).toFixed(1)} fps`;
+  $('bar').style.width = (t / 163.5 * 100) + '%';
+  if (au.ended) stop();
+}
+function start() { au.currentTime = 0; au.play(); running = true; frames = 0; t0 = performance.now(); loop(); }
+function stop() { running = false; au.pause(); $('play').textContent = '▶ PLAY'; if (rec && rec.state !== 'inactive') rec.stop(); }
+$('play').onclick = () => { if (running) return stop(); $('play').textContent = '■ STOP'; start(); };
+$('rec').onclick = () => {
+  const ac = new AudioContext(), src = ac.createMediaElementSource(au), dst = ac.createMediaStreamDestination(); src.connect(dst); src.connect(ac.destination);
+  const st = $('gl').captureStream(30); dst.stream.getAudioTracks().forEach(tr => st.addTrack(tr));
+  const mime = ['video/mp4;codecs=avc1,mp4a', 'video/mp4', 'video/webm;codecs=vp9,opus', 'video/webm'].find(m => MediaRecorder.isTypeSupported(m));
+  rec = new MediaRecorder(st, { mimeType: mime, videoBitsPerSecond: 12e6 }); chunks = [];
+  rec.ondataavailable = e => chunks.push(e.data);
+  rec.onstop = () => { const b = new Blob(chunks, { type: mime }); const a = $('dl'); a.href = URL.createObjectURL(b); a.download = 'ten-music-video.' + (mime.includes('mp4') ? 'mp4' : 'webm'); a.textContent = '⬇ SAVE VIDEO'; a.style.color = '#ffcf6b'; };
+  rec.start(1000); $('play').textContent = '■ STOP'; $('rec').disabled = true; start();
+};
+</script></body></html>
