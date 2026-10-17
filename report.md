@@ -137,9 +137,43 @@ The supplied package was treated as a reference only, and I checked the critical
   artist, Roman numerals, ROUND/REPS/clock, drafting labels and similar. None of it is presented as lyrics.
 
 ### 4.2 Final file
-VERIFY_RESULTS_PLACEHOLDER
+Both scripts were run on the final file: `tools/scripts/verify.py` (toolkit) and `render/verify_final.py` (extended). Overall result: **PASS**.
+
+| Check | Result |
+|---|---|
+| Container / codec | MP4, **H.264 High**, **yuv420p**; audio **AAC-LC 44.1 kHz stereo, 256 kbps** |
+| Resolution | **1920×1080** (16:9) |
+| Frame rate | **30/1 constant**. All 4,905 frame timestamps are spaced 0.033333–0.033334 s |
+| Frame count | **4,905 frames decoded** = 163.5 s × 30 |
+| Duration | video **163.500 s**; source MP3 container 163.500 s (delta 0.000 s); AAC stream 163.468 s (the true decoded PCM length) |
+| Full decode | **no errors** (`ffmpeg -f null`) |
+| Frozen picture | **no freezes ≥ 1 s** (`freezedetect`, n = 0.0015) |
+| Black frames | only 0–0.47 s and 1.2–1.6 s. These are the intended ink-on-black opening, before the stopwatch ring reveals the rooftop |
+| Audio sync | **0.0 ms offset** against the source decode (cross-correlation at 30–38 s) |
+| Audio level | integrated loudness **−8.9 LUFS** source vs **−9.3 LUFS** final; RMS ratio 0.958. This is AAC encoding loss/limiting on a master that peaks at +0.4 dBTP. No gain, speed, pitch or edit changes were applied |
+| Render integrity | 17 segments, **0 page/console errors**. Each segment is a pure `renderFrameAt(t)` evaluation |
+| File size | 93.7 MB (about 4.3 Mbps video, two-pass) |
+
+**Visual review.** During development I looked at contact sheets of ~60 stills across every act, which drove the
+fixes: city scale, rim-light bug, reflections, window bloom, summit staging, sky stars, flash levels, title timing.
+I also reviewed 10 s, 20 s and 110 s preview encodes of the final-quality segments.
 
 ---
 
 ## 5. Remaining uncertainties and honest limitations
-LIMITATIONS_PLACEHOLDER
+- **Not watched in real time with sound by me.** I can inspect stills, contact sheets and measured data, but I cannot watch
+  the playing video or listen to it. Sync is verified numerically (beat grid, 0 ms audio offset, cuts and hits placed on
+  analysed beats), not by viewing it as a human would.
+- **Not every final frame was reviewed visually.** I reviewed sampled stills (about 1 per 2–3 s), not all 4,905 frames.
+  Short glitches between samples are possible: a limb intersecting a body during a blend, a pose pop where a move switches
+  between IK and FK legs, or an echo dissolving a beat early or late.
+- **Lyrics.** The song has vocals, but there was no lyric source, so the video uses no lyrics. Typography is design-only.
+- **Downbeat phase** differs from the supplied package (§4.1). My choice is based on where the 808 enters and drops out. It is a
+  judgement call, at 81% / 72% confidence in the package's own terms.
+- **Audio is AAC, not the original MP3 bytes.** It was re-encoded as the spec requires. Measured loudness is 0.4 LU lower than the source.
+- **Compression.** The file was kept under ~95 MB so it fits in GitHub, at 4.3 Mbps for 1080p30. Busy halftone or rain frames can
+  show some x264 softening. The near-lossless 4:4:4 segments can be re-encoded at a higher bitrate (`VB=12M render/assemble.sh`).
+- **Character design is stylised and procedural** (segmented "designer-toy" figures, no hand-sculpted meshes or skinning),
+  because no external assets were allowed and there is no GPU. The hands are mitts without fingers.
+- **Live web player** (GitHub Pages, `video/player.html`) uses the same code in real time on the viewer's GPU. Its frame rate
+  depends on the device, and its recordings are real-time captures, not frame-exact. **The MP4 is the reference deliverable.**

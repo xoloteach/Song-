@@ -16,7 +16,7 @@ out['audio'] = {k: a.get(k) for k in ['codec_name', 'sample_rate', 'channels', '
 out['format'] = {'duration': pr['format']['duration'], 'size_MB': round(int(pr['format']['size']) / 1e6, 2), 'bit_rate': pr['format']['bit_rate']}
 # per-frame timestamps
 ts = run(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'frame=pts_time', '-of', 'csv=p=0', video]).stdout.split()
-ts = np.array([float(x) for x in ts if x])
+ts = np.array([float(x.strip(',')) for x in ts if x.strip(',')])
 d = np.diff(ts)
 out['frames_decoded'] = int(len(ts)); out['frame_interval_min_max'] = [round(float(d.min()), 6), round(float(d.max()), 6)]
 out['constant_30fps'] = bool(np.all(np.abs(d - 1 / 30) < 1e-3))
